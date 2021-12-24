@@ -55,5 +55,6 @@ logger:
   default: warning
   logs:
     custom_components.kia_uvo: debug
+    hyundai_kia_connect_api: debug
 ```
 

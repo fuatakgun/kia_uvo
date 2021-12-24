@@ -306,19 +306,6 @@ class InstrumentSensor(KiaUvoEntity):
 
         value = self.vehicle.get_child_value(self._key)
 
-        if self._unit == DYNAMIC_TEMP_UNIT:
-            temp_range = self.vehicle.kia_uvo_api.get_temperature_range_by_region()
-            if REGIONS[self.vehicle.kia_uvo_api.region] == REGION_USA:
-                if value == "0xLOW":
-                    return temp_range[0]
-                if value == "0xHIGH":
-                    return temp_range[-1]
-            else:
-                value = value.replace("H", "")
-                value = value.replace("C", "")
-                value = "0x" + value
-                return temp_range[int(value, 16)]
-
         if value is None:
             value = NOT_APPLICABLE
         else:

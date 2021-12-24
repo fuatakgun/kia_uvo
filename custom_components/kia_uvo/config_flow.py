@@ -16,7 +16,7 @@ from homeassistant.const import (
 )
 from homeassistant.core import callback
 import homeassistant.helpers.config_validation as cv
-
+from hyundai_kia_connect_api import KiaUvoApiImpl
 from .utils import get_default_distance_unit
 
 from .const import (
@@ -44,7 +44,7 @@ from .const import (
     BRANDS,
     DEFAULT_BRAND,
 )
-from .KiaUvoApiImpl import KiaUvoApiImpl
+
 from .Token import Token
 from .utils import get_implementation_by_region_brand
 

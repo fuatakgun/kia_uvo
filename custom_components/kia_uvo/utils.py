@@ -8,11 +8,11 @@ from .const import (
     BRAND_HYUNDAI,
 )
 
-from .KiaUvoApiImpl import KiaUvoApiImpl
-from .KiaUvoApiCA import KiaUvoApiCA
-from .KiaUvoApiEU import KiaUvoApiEU
-from .KiaUvoAPIUSA import KiaUvoAPIUSA
-from .HyundaiBlueLinkAPIUSA import HyundaiBlueLinkAPIUSA
+from hyundai_kia_connect_api import KiaUvoApiImpl
+from hyundai_kia_connect_api import KiaUvoApiCA
+from hyundai_kia_connect_api import KiaUvoApiEU
+from hyundai_kia_connect_api import KiaUvoAPIUSA
+from hyundai_kia_connect_api import HyundaiBlueLinkAPIUSA
 
 DEFAULT_DISTANCE_UNIT_ARRAY = []
 

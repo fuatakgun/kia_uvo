@@ -20,6 +20,8 @@ from homeassistant.helpers.dispatcher import (
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util import dt as dt_util
+from hyundai_kia_connect_api import KiaUvoApiImpl
+
 
 from .utils import DEFAULT_DISTANCE_UNIT_ARRAY, get_default_distance_unit
 
@@ -50,7 +52,6 @@ from .const import (
     CONF_USE_EMAIL_WITH_GEOCODE_API,
     PLATFORMS,
 )
-from .KiaUvoApiImpl import KiaUvoApiImpl
 from .Token import Token
 from .utils import get_implementation_by_region_brand
 from .Vehicle import Vehicle
@@ -193,7 +194,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry):
 
     async def update(event_time_utc: datetime):
         await refresh_config_entry()
-        local_timezone = vehicle.kia_uvo_api.get_timezone_by_region()
+        local_timezone = vehicle.kia_uvo_api.data_timezone
         event_time_local = dt_util.as_local(event_time_utc)
         await vehicle.update()
         call_force_update = False

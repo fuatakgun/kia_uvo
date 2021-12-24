@@ -11,9 +11,10 @@ from homeassistant.helpers.dispatcher import (
     async_dispatcher_send,
 )
 from homeassistant.helpers.event import async_call_later
+from hyundai_kia_connect_api import KiaUvoApiImpl
 
 from .const import *
-from .KiaUvoApiImpl import KiaUvoApiImpl
+
 from .Token import Token
 
 _LOGGER = logging.getLogger(__name__)
@@ -257,7 +258,7 @@ class Vehicle:
             r"(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})",
             self.vehicle_data["vehicleStatus"]["time"],
         )
-        local_timezone = self.kia_uvo_api.get_timezone_by_region()
+        local_timezone = self.kia_uvo_api.data_timezone
         last_updated = datetime(
             year=int(m.group(1)),
             month=int(m.group(2)),
