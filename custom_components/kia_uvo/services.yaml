@@ -3,7 +3,7 @@ force_update:
   fields: 
     device_id: 
       name: Vehicle
-      description:
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -13,7 +13,7 @@ update:
   fields: 
     device_id: 
       name: Vehicle
-      description: 
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -23,7 +23,7 @@ start_climate:
   fields: 
     device_id:
       name: Vehicle
-      description:
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -49,7 +49,7 @@ start_climate:
         boolean: 
     temperature:
       name: Temperature
-      description: Set temperature of climate control. Unit is specific to region.
+      description: Set temperature of climate control. Unit is specific to region. Climate must be enabled for this to work. 
       required: true
       example: 21.5
       default: 21
@@ -83,6 +83,7 @@ start_climate:
     flseat:
       name: Front Left Seat
       required: false
+      description: Heated or cool setting.  Only use settings available in your native app. 
       selector:
         select:
           options:  
@@ -97,6 +98,7 @@ start_climate:
     frseat:
       name: Front Right Seat
       required: false
+      description: Heated or cool setting.  Only use settings available in your native app. 
       selector:
         select:
           options:  
@@ -111,6 +113,7 @@ start_climate:
     rlseat:
       name: Rear Left Seat
       required: false
+      description: Heated or cool setting.  Only use settings available in your native app. 
       selector:
         select:
           options:  
@@ -125,6 +128,7 @@ start_climate:
     rrseat:
       name: Rear Right Seat
       required: false
+      description: Heated or cool setting.  Only use settings available in your native app. 
       selector:
         select:
           options:  
@@ -141,7 +145,7 @@ stop_climate:
   fields: 
     device_id: 
       name: Vehicle
-      description: 
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -151,7 +155,7 @@ start_charge:
   fields: 
     device_id: 
       name: Vehicle
-      description:
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -161,7 +165,7 @@ stop_charge:
   fields: 
     device_id: 
       name: Vehicle
-      description: 
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -171,7 +175,7 @@ lock:
   fields: 
     device_id: 
       name: Vehicle
-      description: 
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -181,7 +185,7 @@ unlock:
   fields: 
     device_id: 
       name: Vehicle
-      description: 
+      description: Vehicle to target
       required: true
       selector: 
         device: 
@@ -191,7 +195,7 @@ set_charge_limits:
   fields:
     device_id: 
       name: Vehicle
-      description: 
+      description: Vehicle to target
       required: true
       selector: 
         device: 

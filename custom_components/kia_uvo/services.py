@@ -1,5 +1,5 @@
 import logging
-from typing import Any, cast
+from typing import Any, Dict, cast
 
 
 from homeassistant.const import ATTR_DEVICE_ID
@@ -9,7 +9,7 @@ from .coordinator import HyundaiKiaConnectDataUpdateCoordinator
 from homeassistant.helpers import device_registry
 from hyundai_kia_connect_api import ClimateRequestOptions
 
-from .const import DOMAIN
+from .const import DOMAIN, SEAT_STATUS, HEAT_STATUS
 
 SERVICE_UPDATE = "update"
 SERVICE_FORCE_UPDATE = "force_update"
@@ -45,7 +45,6 @@ def async_setup_services(hass: HomeAssistant) -> bool:
         await coordinator.async_force_update_all()
 
     async def async_handle_update(call):
-        _LOGGER.debug(f"Call:{call.data}")
         coordinator = _get_coordinator_from_device(hass, call)
         await coordinator.async_update_all()
 
@@ -53,11 +52,16 @@ def async_setup_services(hass: HomeAssistant) -> bool:
         coordinator = _get_coordinator_from_device(hass, call)
         vehicle_id = _get_vehicle_id_from_device(hass, call)
         climate_request_options = ClimateRequestOptions(
-            set_temp=call.data["temperature"],
-            duration=call.data["duration"],
-            climate=call.data["climate"],
-            heating=call.data["heating"],
+            set_temp=call.data.get("temperature"),
+            duration=call.data.get("duration"),
+            climate=call.data.get("climate"),
+            heating=_get_key_from_dict(HEAT_STATUS, call.data.get("heating")),
+            front_left_seat=_get_key_from_dict(SEAT_STATUS, call.data.get("flseat")),
+            front_right_seat=_get_key_from_dict(SEAT_STATUS, call.data.get("frseat")),
+            rear_left_seat=_get_key_from_dict(SEAT_STATUS, call.data.get("rlseat")),
+            rear_right_seat=_get_key_from_dict(SEAT_STATUS, call.data.get("rrseat")),
         )
+        _LOGGER.debug(f"Climate Request Options:{climate_request_options}")
         await coordinator.async_start_climate(vehicle_id, climate_request_options)
 
     async def async_handle_stop_climate(call):
@@ -73,7 +77,6 @@ def async_setup_services(hass: HomeAssistant) -> bool:
     async def async_handle_unlock(call):
         coordinator = _get_coordinator_from_device(hass, call)
         vehicle_id = _get_vehicle_id_from_device(hass, call)
-
         await coordinator.async_unlock_vehicle(vehicle_id)
 
     async def async_handle_start_charge(call):
@@ -88,10 +91,11 @@ def async_setup_services(hass: HomeAssistant) -> bool:
 
     async def async_handle_set_charge_limit(call):
         coordinator = _get_coordinator_from_device(hass, call)
+        vehicle_id = _get_vehicle_id_from_device(hass, call)
         ac_limit = call.data.get("ac_limit")
         dc_limit = call.data.get("dc_limit")
         await coordinator.set_charge_limits(
-            call.data[ATTR_DEVICE_ID], ac_limit, dc_limit
+            vehicle_id, ac_limit, dc_limit
         )
 
     services = {
@@ -146,3 +150,9 @@ def _get_coordinator_from_device(
         config_entry_id
     ).unique_id
     return hass.data[DOMAIN][config_entry_unique_id]
+
+def _get_key_from_dict(dict: Dict, search) -> int:
+    for key, value in dict.items():
+       if search == value:
+           return key 
+    return search   

@@ -22,3 +22,24 @@ DEFAULT_NO_FORCE_REFRESH_HOUR_START: int = 22
 DEFAULT_NO_FORCE_REFRESH_HOUR_FINISH: int = 6
 
 DYNAMIC_UNIT: str = "dynamic_unit"
+
+SEAT_STATUS = {
+    None: None,
+    0: "Off",
+    1: "On",
+    2: "Off",
+    3: "Low Cool",
+    4: "Medium Cool",
+    5: "High Cool",
+    6: "Low Heat",
+    7: "Medium Heat",
+    8: "High Heat",
+}
+
+HEAT_STATUS = {
+    None: None,
+    0: "Off",
+    1: "Steering Wheel and Rear Window",
+    2: "Rear Window Only",
+    3: "Steering Wheel Only",
+}
