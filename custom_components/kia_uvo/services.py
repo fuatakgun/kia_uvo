@@ -52,11 +52,37 @@ def async_setup_services(hass: HomeAssistant) -> bool:
     async def async_handle_start_climate(call):
         coordinator = _get_coordinator_from_device(hass, call)
         vehicle_id = _get_vehicle_id_from_device(hass, call)
+        if not call.data.get("flseatheat") and not call.data.get("flseatcool"):
+            front_left_seat_status = 0
+        elif call.data.get("flseatheat"):
+            if call.data.get("flseatheatlevel"):
+                if call.data.get("flseatheatlevel") == 1:
+                    front_left_seat_status = 6
+                elif call.data.get("flseatheatlevel") == 2:
+                    front_left_seat_status = 7
+                elif call.data.get("flseatheatlevel") == 3:
+                    front_left_seat_status = 8
+            else:
+                front_left_seat_status = 1
+        elif call.data.get("flseatcool"):
+            if call.data.get("flseatcoollevel"):
+                if call.data.get("flseatcoollevel") == 1:
+                    front_left_seat_status = 3
+                elif call.data.get("flseatcoollevel") == 2:
+                    front_left_seat_status = 4
+                elif call.data.get("flseatcoollevel") == 3:
+                    front_left_seat_status = 5
+            else:
+                front_left_seat_status = 1
+        if call.data.get("flseatcool") and call.data.get("flseatheat"):
+            #Throw exception. Not possible.
+            pass
         climate_request_options = ClimateRequestOptions(
-            set_temp=call.data["temperature"],
-            duration=call.data["duration"],
-            climate=call.data["climate"],
-            heating=call.data["heating"],
+            set_temp=call.data.get("temperature"),
+            duration=call.data.get("duration"),
+            climate=call.data.get("climate"),
+            heating=call.data.get("heating"),
+            front_left_seat=front_left_seat_status,
         )
         await coordinator.async_start_climate(vehicle_id, climate_request_options)
 

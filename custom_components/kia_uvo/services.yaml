@@ -80,62 +80,150 @@ start_climate:
             - "Steering Wheel and Rear Window"
             - "Rear Window Only"
             - "Steering Wheel Only"
-    flseat:
-      name: Front Left Seat
+    flseatheat:
+      name: Front Left Seat Heat
       required: false
+      default: false
       selector:
-        select:
-          options:  
-            - "Off"
-            - "On"
-            - Low Cool
-            - Medium Cool
-            - High Cool
-            - Low Heat 
-            - Medium Heat
-            - High Heat
-    frseat:
-      name: Front Right Seat
+        boolean:
+    flseatheatlevel:
+      name: Front Left Seat Heat Level
+      description: Level of heat. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
       required: false
+      example: 3
+      default: 3
       selector:
-        select:
-          options:  
-            - "Off"
-            - "On"
-            - Low Cool
-            - Medium Cool
-            - High Cool
-            - Low Heat 
-            - Medium Heat
-            - High Heat    
-    rlseat:
-      name: Rear Left Seat
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level
+    frseatheat:
+      name: Front Right Seat Heat
       required: false
+      default: false
       selector:
-        select:
-          options:  
-            - "Off"
-            - "On"
-            - Low Cool
-            - Medium Cool
-            - High Cool
-            - Low Heat 
-            - Medium Heat
-            - High Heat
-    rrseat:
-      name: Rear Right Seat
+        boolean:   
+    frseatheatlevel:
+      name: Front Right Seat Heat Level
+      description: Level of heat. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
       required: false
+      example: 3
+      default: 3
       selector:
-        select:
-          options:  
-            - "Off"
-            - "On"
-            - Low Cool
-            - Medium Cool
-            - High Cool
-            - Low Heat 
-            - Medium Heat
-            - High Heat
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level       
+    rlseatheat:
+      name: Rear Left Seat Heat
+      required: false
+      default: false
+      selector:
+        boolean:
+    rrseatheatlevel:
+      name: Rear Right Seat Heat Level
+      description: Level of heat. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
+      required: false
+      example: 3
+      default: 3
+      selector:
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level
+    rrseatheat:
+      name: Rear Right Seat Heat
+      required: false
+      default: false
+      selector:
+        boolean:
+    rrseatheatlevel:
+      name: Rear Right Seat Heat Level
+      description: Level of heat. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
+      required: false
+      example: 3
+      default: 3
+      selector:
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level
+    flseatcool:
+      name: Front Left Seat Cool
+      required: false
+      default: false
+      selector:
+        boolean:
+    flseatcoollevel:
+      name: Front Left Seat Cool Level
+      description: Level of cool. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
+      required: false
+      example: 3
+      default: 3
+      selector:
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level
+    frseatcool:
+      name: Front Right Seat Cool
+      required: false
+      default: false
+      selector:
+        boolean:  
+    frseatcoollevel:
+      name: Front Right Seat Cool Level
+      description: Level of cool. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
+      required: false
+      example: 3
+      default: 3
+      selector:
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level 
+    rlseatcool:
+      name: Rear Left Seat Cool
+      required: false
+      default: false
+      selector:
+        boolean:
+    rlseatcoollevel:
+      name: Rear Left Seat Cool Level
+      description: Level of cool. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
+      required: false
+      example: 3
+      default: 3
+      selector:
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level
+    rrseatcool:
+      name: Rear Right Seat Cool
+      required: false
+      default: false
+      selector:
+        boolean:
+    rrseatcoollevel:
+      name: Rear Right Seat Cool Level
+      description: Level of cool. Not available in all cars. If levels aren't in the app leave blank. 3 being highest.
+      required: false
+      example: 3
+      default: 3
+      selector:
+        number:
+            min: 1
+            max: 3
+            step: 1
+            unit_of_measurement: Level
 stop_climate:
   description: Please use cautiously - stop car and climate
   fields: 
