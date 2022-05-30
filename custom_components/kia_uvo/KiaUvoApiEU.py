@@ -90,6 +90,8 @@ class KiaUvoApiEU(KiaUvoApiImpl):
             + ".v2.json"
         )
 
+        self.supports_drive_history = True
+
     def get_stamps_from_bluelinky(self) -> list:
         stamps = []
         response = requests.get(self.stamps_url)
@@ -453,6 +455,26 @@ class KiaUvoApiEU(KiaUvoApiImpl):
         response = response.json()
         _LOGGER.debug(f"{DOMAIN} - get_cached_vehicle_status response {response}")
         return response["resMsg"]["vehicleStatusInfo"]
+
+    def get_drive_history(self, token: Token):
+        url = self.SPA_API_URL + "vehicles/" + token.vehicle_id + "/drvhistory"
+        headers = {
+            "Authorization": token.access_token,
+            "ccsp-service-id": self.CCSP_SERVICE_ID,
+            "ccsp-application-id": self.APP_ID,
+            "Stamp": self.get_stamp(),
+            "ccsp-device-id": token.device_id,
+            "Host": self.BASE_URL,
+            "Connection": "Keep-Alive",
+            "Accept-Encoding": "gzip",
+            "User-Agent": USER_AGENT_OK_HTTP,
+        }
+
+        payload = {"periodTarget": 0}
+        response = requests.post(url, json=payload, headers=headers)
+        response = response.json()
+        _LOGGER.debug(f"{DOMAIN} - get_drive_history response {response}")
+        return response["resMsg"]
 
     def get_geocoded_location(self, lat, lon):
         email_parameter = ""

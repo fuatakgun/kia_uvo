@@ -29,6 +29,7 @@ class KiaUvoApiImpl:
         self.brand = brand
         self.last_action_tracked = False
         self.supports_soc_range = True
+        self.supports_drive_history = False
 
     def login(self) -> Token:
         pass
@@ -37,6 +38,9 @@ class KiaUvoApiImpl:
         pass
 
     def get_cached_vehicle_status(self, token: Token):
+        pass
+
+    def get_drive_history(self, token: Token):
         pass
 
     def check_last_action_status(self, token: Token):

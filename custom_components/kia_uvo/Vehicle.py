@@ -1,6 +1,7 @@
 import logging
 
 from datetime import datetime
+from datetime import date
 import re
 import traceback
 
@@ -56,6 +57,12 @@ class Vehicle:
             self.vehicle_data = await self.hass.async_add_executor_job(
                 self.kia_uvo_api.get_cached_vehicle_status, self.token
             )
+            if self.kia_uvo_api.supports_drive_history:
+                self.set_average_electric_consumption_today(
+                    await self.hass.async_add_executor_job(
+                        self.kia_uvo_api.get_drive_history, self.token
+                    )
+                )
             self.set_last_updated()
             self.set_engine_type()
             if self.enable_geolocation_entity:
@@ -294,6 +301,7 @@ class Vehicle:
 
     def get_child_value(self, key):
         value = self.vehicle_data
+
         for x in key.split("."):
             try:
                 value = value[x]
@@ -303,3 +311,22 @@ class Vehicle:
                 except:
                     value = None
         return value
+
+    def set_average_electric_consumption_today(self, drive_history):
+        today = date.today().strftime("%Y%m%d")
+        daily_infos = [
+            x for x in drive_history["drivingInfoDetail"] if x["drivingDate"] == today
+        ]
+        try:
+            daily_info = daily_infos[0]
+            total_consumption = daily_info["totalPwrCsp"]
+            total_driving_distance = daily_info["calculativeOdo"]
+            average_consumption = (
+                total_consumption / total_driving_distance * 100 / 1000
+            )
+            self.vehicle_data["averageElectricConsumptionToday"] = average_consumption
+        except (IndexError, KeyError):
+            _LOGGER.info(
+                f"{DOMAIN} - no driving history for today, average electric consumption is 0"
+            )
+            self.vehicle_data["averageElectricConsumptionToday"] = 0.0
