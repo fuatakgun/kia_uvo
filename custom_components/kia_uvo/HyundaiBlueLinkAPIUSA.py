@@ -172,6 +172,14 @@ class HyundaiBlueLinkAPIUSA(KiaUvoApiImpl):
         vehicle_status = {}
         vehicle_status["vehicleStatus"] = response["vehicleStatus"]
 
+        if (
+            vehicle_status["vehicleStatus"]["evStatus"]["batteryStatus"] == 0
+            and HyundaiBlueLinkAPIUSA.old_vehicle_status is not None
+        ):
+            vehicle_status["vehicleStatus"][
+                "evStatus"
+            ] = HyundaiBlueLinkAPIUSA.old_vehicle_status["vehicleStatus"]["evStatus"]
+
         vehicle_status["vehicleStatus"]["dateTime"] = (
             vehicle_status["vehicleStatus"]["dateTime"]
             .replace("-", "")

@@ -20,6 +20,9 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class Vehicle:
+
+    previous_vehicle_data = None
+
     def __init__(
         self,
         hass: HomeAssistant,
@@ -51,8 +54,13 @@ class Vehicle:
 
     async def update(self):
         try:
-            previous_vehicle_status = self.get_child_value("vehicleStatus")
-            previous_vehicle_location = self.get_child_value("vehicleLocation")
+            Vehicle.previous_vehicle_data = self.vehicle_data
+            previous_vehicle_status = self.get_child_value(
+                "vehicleStatus", Vehicle.previous_vehicle_data
+            )
+            previous_vehicle_location = self.get_child_value(
+                "vehicleLocation", Vehicle.previous_vehicle_data
+            )
             self.vehicle_data = await self.hass.async_add_executor_job(
                 self.kia_uvo_api.get_cached_vehicle_status, self.token
             )
@@ -292,8 +300,10 @@ class Vehicle:
                     self.engine_type = VEHICLE_ENGINE_TYPE.IC
         _LOGGER.debug(f"{DOMAIN} - Engine type set {self.engine_type}")
 
-    def get_child_value(self, key):
-        value = self.vehicle_data
+    def get_child_value(self, key, source=None, default=None):
+        if source is None:
+            source = self.vehicle_data
+        value = source
         for x in key.split("."):
             try:
                 value = value[x]
@@ -302,4 +312,6 @@ class Vehicle:
                     value = value[int(x)]
                 except:
                     value = None
+        if value is None:
+            value = default
         return value
