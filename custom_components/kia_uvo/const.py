@@ -76,6 +76,19 @@ EU_TEMP_RANGE = [x * 0.5 for x in range(28, 60)]
 CA_TEMP_RANGE = [x * 0.5 for x in range(32, 64)]
 USA_TEMP_RANGE = range(62, 82)
 
+SEAT_STATUS = {
+    None: None,
+    0: "Off",
+    1: "On",
+    2: "Off",
+    3: "Low Cool",
+    4: "Medium Cool",
+    5: "Full Cool",
+    6: "Low Heat",
+    7: "Medium Heat",
+    8: "High Heat",
+}
+
 
 class VEHICLE_ENGINE_TYPE(Enum):
     EV = 1
