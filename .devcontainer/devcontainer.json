@@ -1,0 +1,32 @@
+{
+	"image": "ghcr.io/ludeeus/devcontainer/integration:stable",
+	"context": "..",
+	"appPort": [
+		"8123:8123"
+	],
+	"postCreateCommand": "container install",
+	"extensions": [
+		"ms-python.python",
+		"github.vscode-pull-request-github",
+		"ryanluker.vscode-coverage-gutters",
+		"ms-python.vscode-pylance"
+	],
+	"settings": {
+		"files.eol": "\n",
+		"editor.tabSize": 4,
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"python.pythonPath": "/usr/local/python/bin/python",
+		"python.analysis.autoSearchPaths": false,
+		"python.linting.pylintEnabled": true,
+		"python.linting.enabled": true,
+		"python.linting.pylintArgs": [
+			"--disable",
+			"import-error"
+		],
+		"python.formatting.provider": "black",
+		"editor.formatOnPaste": false,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		"files.trimTrailingWhitespace": true
+	}
+}
