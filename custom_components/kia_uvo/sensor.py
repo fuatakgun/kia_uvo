@@ -1,10 +1,13 @@
 import logging
 
 from homeassistant.const import (
+    ENERGY_KILO_WATT_HOUR,
+    ENERGY_WATT_HOUR,
     PERCENTAGE,
     DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_TIMESTAMP,
     DEVICE_CLASS_TEMPERATURE,
+    DEVICE_CLASS_ENERGY,
     TIME_MINUTES,
     TEMP_FAHRENHEIT,
     TEMP_CELSIUS,
@@ -147,6 +150,28 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 "mdi:car-electric",
                 None,
                 None,
+            )
+        )
+        INSTRUMENTS.append(
+            (
+                "monthlyEnergyConsumption",
+                "Monthly Energy Consumption",
+                "drvhistory.totalPwrCsp",
+                ENERGY_WATT_HOUR,
+                "mdi:car-electric",
+                DEVICE_CLASS_ENERGY,
+                SensorStateClass.TOTAL_INCREASING,
+            )
+        )
+        INSTRUMENTS.append(
+            (
+                "averageEnergyConsumption",
+                "Average Energy Consumption",
+                "drvhistory.consumption30d",
+                f"{ENERGY_WATT_HOUR}/{vehicle.unit_of_measurement}",
+                "mdi:car-electric",
+                None,
+                SensorStateClass.MEASUREMENT,
             )
         )
 
@@ -355,6 +380,11 @@ class InstrumentSensor(KiaUvoEntity, SensorEntity):
 
         if value is None:
             value = NOT_APPLICABLE
+        elif (
+            self._source_unit == ENERGY_WATT_HOUR
+            and self._unit == ENERGY_KILO_WATT_HOUR
+        ):
+            value = round(value / 1000, 1)
         else:
             if self._source_unit != self._unit:
                 value = distance_util.convert(
@@ -372,6 +402,8 @@ class InstrumentSensor(KiaUvoEntity, SensorEntity):
                 return TEMP_CELSIUS
             else:
                 return TEMP_FAHRENHEIT
+        elif self._unit == ENERGY_WATT_HOUR:
+            self._unit = ENERGY_KILO_WATT_HOUR
 
         if self._dynamic_distance_unit == False:
             return self._unit
@@ -394,6 +426,28 @@ class InstrumentSensor(KiaUvoEntity, SensorEntity):
                 "address": self.vehicle.get_child_value(
                     "vehicleLocation.geocodedLocation.address"
                 )
+            }
+        elif self._id == "monthlyEnergyConsumption":
+            return {
+                "totalPwrCsp": self.vehicle.get_child_value("drvhistory.totalPwrCsp"),
+                "motorPwrCsp": self.vehicle.get_child_value("drvhistory.motorPwrCsp"),
+                "climatePwrCsp": self.vehicle.get_child_value(
+                    "drvhistory.climatePwrCsp"
+                ),
+                "eDPwrCsp": self.vehicle.get_child_value("drvhistory.eDPwrCsp"),
+                "regenPwr": self.vehicle.get_child_value("drvhistory.regenPwr"),
+                "batteryMgPwrCsp": self.vehicle.get_child_value(
+                    "drvhistory.batteryMgPwrCsp"
+                ),
+                "calculativeOdo": self.vehicle.get_child_value(
+                    "drvhistory.calculativeOdo"
+                ),
+                "drivingDate": "".join(
+                    filter(
+                        str.isdigit,
+                        self.vehicle.get_child_value("drvhistory.drivingDate"),
+                    )
+                ),
             }
         return None
 
